@@ -6,6 +6,38 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
+
+# Configuración de usuarios y contraseñas
+USUARIOS = {
+    "wiga": "contraseña_secreta123",
+    "admin": "admin123",
+    "dany":"futbol123"
+}
+
+# Función de autenticación básica
+def autenticacion():
+    if 'autenticado' not in st.session_state:
+        st.session_state.autenticado = False
+        
+    if not st.session_state.autenticado:
+        with st.container():
+            st.title("🔒 Inicio de Sesión")
+            usuario = st.text_input("Usuario")
+            contraseña = st.text_input("Contraseña", type="password")
+            
+            if st.button("Ingresar"):
+                if USUARIOS.get(usuario) == contraseña:
+                    st.session_state.autenticado = True
+                    st.rerun()
+                else:
+                    st.error("❌ Usuario o contraseña incorrectos")
+        return False
+    return True
+
+# Verificar autenticación antes de mostrar la app
+if not autenticacion():
+    st.stop()
+
 # Show app title and description.
 st.set_page_config(page_title="Support tickets", page_icon="🎫")
 st.title("🎫 Support tickets")
